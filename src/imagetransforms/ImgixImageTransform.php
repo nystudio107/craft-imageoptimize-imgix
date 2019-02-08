@@ -173,9 +173,10 @@ class ImgixImageTransform extends ImageTransform
             // Remove the api-key param
             unset($params['api-key']);
             // Apply the Security Token, if set
-            if (!empty($this->securityToken)) {
-                $builder->setSignKey($this->securityToken);
+            if (!empty($params['security-token'])) {
+                $builder->setSignKey($params['security-token']);
             }
+            unset($params['security-token']);
             // Finally, create the Imgix URL for this transformed image
             $assetUri = $this->getAssetUri($asset);
             $url = $builder->createURL($assetUri, $params);
@@ -281,10 +282,19 @@ class ImgixImageTransform extends ImageTransform
      */
     public function getTransformParams(): array
     {
-        $params = [
-            'domain'  => $this->domain,
-            'api-key' => $this->apiKey,
-        ];
+        if (ImageOptimize::$craft31) {
+            $params = [
+                'domain' => Craft::parseEnv($this->domain),
+                'api-key' => Craft::parseEnv($this->apiKey),
+                'security-token' => Craft::parseEnv($this->securityToken),
+            ];
+        } else {
+            $params = [
+                'domain' => $this->domain,
+                'api-key' => $this->apiKey,
+                'security-token' => $this->securityToken,
+            ];
+        }
 
         return $params;
     }
