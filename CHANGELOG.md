@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 1.0.3 - 2019.02.22
+### Changed
+* Fixed an issue where focal points weren't always respected for Imgix
+
 ## 1.0.2 - 2019.02.07
 ### Changed
 * Fixed an issue where `.env` vars were not actually parsed
