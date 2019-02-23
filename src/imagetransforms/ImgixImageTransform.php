@@ -154,15 +154,16 @@ class ImgixImageTransform extends ImageTransform
                             $params['fp-x'] = $focalPoint['x'];
                             $params['fp-y'] = $focalPoint['y'];
                             $cropParams[] = 'focalpoint';
+                            $params['crop'] = implode(',', $cropParams);
                         } elseif (preg_match('/(top|center|bottom)-(left|center|right)/', $transform->position)) {
                             // Imgix defaults to 'center' if no param is present
                             $filteredCropParams = explode('-', $transform->position);
                             $filteredCropParams = array_diff($filteredCropParams, ['center']);
                             $cropParams[] = $filteredCropParams;
-                        }
-                        // Imgix
-                        if (!empty($cropParams) && $transform->position !== 'center-center') {
-                            $params['crop'] = implode(',', $cropParams);
+                            // Imgix
+                            if (!empty($cropParams) && $transform->position !== 'center-center') {
+                                $params['crop'] = implode(',', $cropParams);
+                            }
                         }
                         break;
                 }
