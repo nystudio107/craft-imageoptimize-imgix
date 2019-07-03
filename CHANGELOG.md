@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 1.1.0 - 2019.07.05
+### Changed
+* Updated to work with the ImageOptimize 1.6.0 `ImageTransformInterface`
+
 ## 1.0.3 - 2019.02.22
 ### Changed
 * Fixed an issue where focal points weren't always respected for Imgix
