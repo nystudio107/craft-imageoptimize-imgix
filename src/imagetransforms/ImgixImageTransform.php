@@ -27,7 +27,7 @@ use Craft;
 /**
  * @author    nystudio107
  * @package   ImageOptimize
- * @since     1.0.0
+ * @since     1.1.0
  */
 class ImgixImageTransform extends ImageTransform
 {
@@ -78,18 +78,24 @@ class ImgixImageTransform extends ImageTransform
     /**
      * @param Asset               $asset
      * @param AssetTransform|null $transform
-     * @param array               $params
      *
      * @return string|null
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function getTransformUrl(Asset $asset, $transform, array $params = [])
+    public function getTransformUrl(Asset $asset, $transform)
     {
         $url = null;
+        $params = [];
         $settings = ImageOptimize::$plugin->getSettings();
 
-        $domain = $params['domain'] ?? 'demos.imgix.net';
+        $domain = $this->domain ?? 'demos.imgix.net';
+        $securityToken = $this->securityToken;
+        if (ImageOptimize::$craft31) {
+            $domain = Craft::parseEnv($domain);
+            $securityToken = Craft::parseEnv($securityToken);
+        }
+        $params['domain'] = $domain;
         $builder = new UrlBuilder($domain);
         if ($asset && $builder) {
             $builder->setUseHttps(true);
@@ -171,13 +177,10 @@ class ImgixImageTransform extends ImageTransform
                 // No transform was passed in; so just auto all the things
                 $params['auto'] = 'format,compress';
             }
-            // Remove the api-key param
-            unset($params['api-key']);
             // Apply the Security Token, if set
-            if (!empty($params['security-token'])) {
-                $builder->setSignKey($params['security-token']);
+            if (!empty($securityToken)) {
+                $builder->setSignKey($securityToken);
             }
-            unset($params['security-token']);
             // Finally, create the Imgix URL for this transformed image
             $assetUri = $this->getAssetUri($asset);
             $url = $builder->createURL($assetUri, $params);
@@ -194,11 +197,10 @@ class ImgixImageTransform extends ImageTransform
      * @param string              $url
      * @param Asset               $asset
      * @param AssetTransform|null $transform
-     * @param array               $params
      *
      * @return string
      */
-    public function getWebPUrl(string $url, Asset $asset, $transform, array $params = []): string
+    public function getWebPUrl(string $url, Asset $asset, $transform): string
     {
         $url = preg_replace('/fm=[^&]*/', 'fm=webp', $url);
 
@@ -207,24 +209,32 @@ class ImgixImageTransform extends ImageTransform
 
     /**
      * @param Asset $asset
-     * @param array $params
      *
      * @return null|string
      * @throws \yii\base\InvalidConfigException
      */
-    public function getPurgeUrl(Asset $asset, array $params = [])
+    public function getPurgeUrl(Asset $asset)
     {
         $url = null;
 
-        $domain = isset($params['domain'])
-            ? $params['domain']
-            : 'demos.imgix.net';
+        $domain = $this->domain ?? 'demos.imgix.net';
+        $apiKey = $this->apiKey;
+        $securityToken = $this->securityToken;
+        if (ImageOptimize::$craft31) {
+            $domain = Craft::parseEnv($domain);
+            $apiKey = Craft::parseEnv($apiKey);
+            $securityToken = Craft::parseEnv($securityToken);
+        }
         $builder = new UrlBuilder($domain);
         if ($asset && $builder) {
             $builder->setUseHttps(true);
             // Create the Imgix URL for purging this image
             $assetUri = $this->getAssetUri($asset);
-            $url = $builder->createURL($assetUri, $params);
+            $url = $builder->createURL($assetUri, [
+                'domain' => $domain,
+                'api-key' => $apiKey,
+                'security-token' => $securityToken,
+            ]);
             // Strip the query string so we just pass in the raw URL
             $url = UrlHelper::stripQueryString($url);
         }
@@ -234,16 +244,17 @@ class ImgixImageTransform extends ImageTransform
 
     /**
      * @param string $url
-     * @param array  $params
      *
      * @return bool
      */
-    public function purgeUrl(string $url, array $params = []): bool
+    public function purgeUrl(string $url): bool
     {
         $result = false;
-        $apiKey = isset($params['api-key'])
-            ? $params['api-key']
-            : '';
+
+        $apiKey = $this->apiKey;
+        if (ImageOptimize::$craft31) {
+            $apiKey = Craft::parseEnv($apiKey);
+        }
         // create new guzzle client
         $guzzleClient = Craft::createGuzzleClient(['timeout' => 120, 'connect_timeout' => 120]);
         // Submit the sitemap index to each search engine
@@ -276,28 +287,6 @@ class ImgixImageTransform extends ImageTransform
         }
 
         return $result;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTransformParams(): array
-    {
-        if (ImageOptimize::$craft31) {
-            $params = [
-                'domain' => Craft::parseEnv($this->domain),
-                'api-key' => Craft::parseEnv($this->apiKey),
-                'security-token' => Craft::parseEnv($this->securityToken),
-            ];
-        } else {
-            $params = [
-                'domain' => $this->domain,
-                'api-key' => $this->apiKey,
-                'security-token' => $this->securityToken,
-            ];
-        }
-
-        return $params;
     }
 
     /**
