@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 1.1.1 - 2019.10.03
+### Changed
+* Changed `clamp` to `clip` for the **fit** transform method
+
 ## 1.1.0 - 2019.07.05
 ### Changed
 * Updated to work with the ImageOptimize 1.6.0 `ImageTransformInterface`
