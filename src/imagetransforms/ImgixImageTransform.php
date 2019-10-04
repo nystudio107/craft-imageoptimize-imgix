@@ -139,7 +139,7 @@ class ImgixImageTransform extends ImageTransform
                 // Handle the mode
                 switch ($transform->mode) {
                     case 'fit':
-                        $params['fit'] = 'clamp';
+                        $params['fit'] = 'clip';
                         break;
 
                     case 'stretch':
