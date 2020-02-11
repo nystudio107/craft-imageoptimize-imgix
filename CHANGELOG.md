@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 1.1.2 - 2020.02.11
+### Changed
+* Updated to `imgix/imgix-php` version `^3.0.0`
+
 ## 1.1.1 - 2019.10.03
 ### Changed
 * Changed `clamp` to `clip` for the **fit** transform method
