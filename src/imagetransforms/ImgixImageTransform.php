@@ -23,6 +23,8 @@ use Imgix\UrlBuilder;
 use Psr\Http\Message\ResponseInterface;
 
 use Craft;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 /**
  * @author    nystudio107
@@ -202,9 +204,18 @@ class ImgixImageTransform extends ImageTransform
      */
     public function getWebPUrl(string $url, Asset $asset, $transform): string
     {
-        $url = preg_replace('/fm=[^&]*/', 'fm=webp', $url);
+        if ($transform) {
+            $transform->format = 'webp';
+        }
+        try {
+            $webPUrl = $this->getTransformUrl($asset, $transform);
+        } catch (InvalidConfigException $e) {
+            Craft::error($e->getMessage(), __METHOD__);
+        } catch (Exception $e) {
+            Craft::error($e->getMessage(), __METHOD__);
+        }
 
-        return $url;
+        return $webPUrl ?? '';
     }
 
     /**
