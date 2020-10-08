@@ -1,8 +1,8 @@
 # ImageOptimize Imgix Image Transform Changelog
 
 ## 1.1.3 - 2020.10.07
-### Changed
-* Fixed improperly generated `webp` URL
+### Fixed
+* Fixed improperly generated `webp` URL for Imgix
 
 ## 1.1.2 - 2020.02.11
 ### Changed
