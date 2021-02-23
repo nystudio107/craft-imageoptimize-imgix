@@ -43,7 +43,8 @@ class ImgixImageTransform extends ImageTransform
         'format'  => 'fm',
     ];
 
-    const IMGIX_PURGE_ENDPOINT = 'https://api.imgix.com/v2/image/purger';
+    const IMGIX_PURGE_ENDPOINT_OLD = 'https://api.imgix.com/v2/image/purger';
+    const IMGIX_PURGE_ENDPOINT = 'https://api.imgix.com/api/v1/purge';
 
     // Static Methods
     // =========================================================================
@@ -76,6 +77,11 @@ class ImgixImageTransform extends ImageTransform
 
     // Public Methods
     // =========================================================================
+
+    public function init()
+    {
+        parent::init();
+    }
 
     /**
      * @param Asset               $asset
@@ -263,6 +269,20 @@ class ImgixImageTransform extends ImageTransform
         $result = false;
 
         $apiKey = $this->apiKey;
+        if ($apiKey === '') {
+            Craft::error(
+                'Imgix API key is not set',
+                __METHOD__
+            );
+            return false;
+        }
+        $oldAPI = false;
+        // Check the API key to see if it is deprecated or not
+        if (strlen($this->apiKey) < 50) {
+            $oldAPI = true;
+            Craft::$app->deprecator->log(__METHOD__, 'You are using a deprecated API key. Obtain a new API key to use the purging API. More info: https://blog.imgix.com/2020/10/16/api-deprecation');
+        }
+
         if (ImageOptimize::$craft31) {
             $apiKey = Craft::parseEnv($apiKey);
         }
@@ -270,16 +290,31 @@ class ImgixImageTransform extends ImageTransform
         $guzzleClient = Craft::createGuzzleClient(['timeout' => 120, 'connect_timeout' => 120]);
         // Submit the sitemap index to each search engine
         try {
-            /** @var ResponseInterface $response */
-            $response = $guzzleClient->post(self::IMGIX_PURGE_ENDPOINT, [
-                'auth'        => [
-                    $apiKey,
-                    '',
-                ],
-                'form_params' => [
-                    'url' => $url,
-                ],
-            ]);
+            if ($oldAPI) {
+                $response = $guzzleClient->post(self::IMGIX_PURGE_ENDPOINT_OLD, [
+                    'auth'        => [
+                        $apiKey,
+                        '',
+                    ],
+                    'form_params' => [
+                        'url' => $url,
+                    ],
+                ]);
+            } else {
+                $response = $guzzleClient->post(self::IMGIX_PURGE_ENDPOINT, [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $apiKey,
+                    ],
+                    'form_params' => [
+                        'data' => [
+                            'attributes' => [
+                                'url' => $url
+                            ],
+                            'type' => 'purges'
+                        ]
+                    ],
+                ]);
+            }
             // See if it succeeded
             if (($response->getStatusCode() >= 200)
                 && ($response->getStatusCode() < 400)

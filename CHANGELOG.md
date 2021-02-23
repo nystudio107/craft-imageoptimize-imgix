@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 1.2.0 - 2021.02.23
+### Changed
+* Updated to use the new Imgix [purging API](https://blog.imgix.com/2020/10/16/api-deprecation)
+
 ## 1.1.3 - 2020.10.07
 ### Fixed
 * Fixed improperly generated `webp` URL for Imgix
