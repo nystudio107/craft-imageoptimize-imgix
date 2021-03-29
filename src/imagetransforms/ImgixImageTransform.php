@@ -75,6 +75,11 @@ class ImgixImageTransform extends ImageTransform
      */
     public $securityToken;
 
+    /**
+     * @var int The amount that should be sent to the USM parameter
+     */
+    public $unsharpMask = 20;
+
     // Public Methods
     // =========================================================================
 
@@ -141,7 +146,7 @@ class ImgixImageTransform extends ImageTransform
                     $widthScale = $asset->getWidth() / ($transform->width ?? $asset->getWidth());
                     $heightScale = $asset->getHeight() / ($transform->height ?? $asset->getHeight());
                     if (($widthScale >= 2.0) || ($heightScale >= 2.0)) {
-                        $params['usm'] = 50.0;
+                        $params['usm'] = (int)($this->unsharpMask ?? 25);
                     }
                 }
                 // Handle the mode

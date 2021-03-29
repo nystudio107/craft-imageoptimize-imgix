@@ -62,3 +62,15 @@
         warning: configWarning('imageTransformTypeSettings', 'image-optimize'),
     }) }}
 {% endif %}
+{{ forms.textField({
+    label: 'Unsharp Mask (USM)',
+    instructions: "The amount of sharpening that should be applied if an image is scaled down more than 50% via the [USM parameter](https://docs.imgix.com/apis/rendering/adjustment/usm)."|t('image-optimize'),
+    id: 'unsharpMask',
+    name: 'unsharpMask',
+    value: imageTransform.unsharpMask,
+    min: -100,
+    max: 100,
+    inputmode: 'numeric',
+    size: 4,
+    warning: configWarning('imageTransformTypeSettings', 'image-optimize'),
+}) }}
