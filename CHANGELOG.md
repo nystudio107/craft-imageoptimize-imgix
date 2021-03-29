@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 1.2.1 - 2021.03.28
+### Changed
+* Added the **Unsharp Mask (USM)** config setting
+
 ## 1.2.0 - 2021.02.23
 ### Changed
 * Updated to use the new Imgix [purging API](https://blog.imgix.com/2020/10/16/api-deprecation)
