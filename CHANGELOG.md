@@ -1,6 +1,6 @@
 # ImageOptimize Imgix Image Transform Changelog
 
-## 1.2.1 - UNRELEASED
+## 1.2.1 - 2021.03.28
 ### Changed
 * Added the **Unsharp Mask (USM)** config setting
 
