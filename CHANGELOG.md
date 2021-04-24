@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 1.2.2 - UNRELEASED
+### Added
+* Added a setting to control the amount an image needs to be scaled down for automatic sharpening to be applied (https://github.com/nystudio107/craft-imageoptimize/issues/263)
+
 ## 1.2.1 - 2021.03.28
 ### Changed
 * Added the **Unsharp Mask (USM)** config setting
