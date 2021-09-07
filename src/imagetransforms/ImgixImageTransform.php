@@ -43,8 +43,8 @@ class ImgixImageTransform extends ImageTransform
         'format'  => 'fm',
     ];
 
-    const IMGIX_PURGE_ENDPOINT_OLD = 'https://api.imgix.com/v2/image/purger';
-    const IMGIX_PURGE_ENDPOINT = 'https://api.imgix.com/api/v1/purge';
+    const IMGIX_PURGE_ENDPOINT = 'https://api.imgix.com/v2/image/purger';
+    const IMGIX_PURGE_ENDPOINT_OLD = 'https://api.imgix.com/api/v1/purge';
 
     // Static Methods
     // =========================================================================
