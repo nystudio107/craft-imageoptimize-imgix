@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 1.2.3 - 2021.04.23
+### Fixed
+* Fixed an issue where the wrong Imgix API was being used for purging images ([#273](https://github.com/nystudio107/craft-imageoptimize/issues/273))
+
 ## 1.2.2 - 2021.04.23
 ### Added
 * Added a setting to control the amount an image needs to be scaled down for automatic sharpening to be applied (https://github.com/nystudio107/craft-imageoptimize/issues/263)
