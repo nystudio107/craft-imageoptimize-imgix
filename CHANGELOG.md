@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 1.2.4 - 2022.02.23
+### Fixed
+* Use the new Imgix purge API endpoint properly ([#4](https://github.com/nystudio107/craft-imageoptimize-imgix/issues/4))
+
 ## 1.2.3 - 2021.09.07
 ### Fixed
 * Fixed an issue where the wrong Imgix API was being used for purging images ([#273](https://github.com/nystudio107/craft-imageoptimize/issues/273))

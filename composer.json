@@ -1,35 +1,35 @@
 {
-    "name": "nystudio107/craft-imageoptimize-imgix",
-    "description": "Provides an Imgix image transform type for the ImageOptimize plugin.",
-    "type": "image-transform",
-    "version": "1.2.3",
-    "keywords": [
-        "craftcms",
-        "imgix",
-        "image-optimize",
-        "image-transform"
-    ],
-    "support": {
-        "docs": "https://github.com/nystudio107/craft-imageoptimize-imgix/blob/v1/README.md",
-        "issues": "https://github.com/nystudio107/craft-imageoptimize-imgix/issues"
-    },
-    "license": "proprietary",
-    "authors": [
-        {
-            "name": "nystudio107",
-            "homepage": "https://nystudio107.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require": {
-        "craftcms/cms": "^3.0.0",
-        "nystudio107/craft-imageoptimize": "^1.6.33",
-        "imgix/imgix-php": "^3.0.0"
-    },
-    "autoload": {
-        "psr-4": {
-          "nystudio107\\imageoptimizeimgix\\": "src/"
-        }
+  "name": "nystudio107/craft-imageoptimize-imgix",
+  "description": "Provides an Imgix image transform type for the ImageOptimize plugin.",
+  "type": "image-transform",
+  "version": "1.2.4",
+  "keywords": [
+    "craftcms",
+    "imgix",
+    "image-optimize",
+    "image-transform"
+  ],
+  "support": {
+    "docs": "https://github.com/nystudio107/craft-imageoptimize-imgix/blob/v1/README.md",
+    "issues": "https://github.com/nystudio107/craft-imageoptimize-imgix/issues"
+  },
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "nystudio107",
+      "homepage": "https://nystudio107.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "craftcms/cms": "^3.0.0",
+    "nystudio107/craft-imageoptimize": "^1.6.33",
+    "imgix/imgix-php": "^3.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "nystudio107\\imageoptimizeimgix\\": "src/"
+    }
+  }
 }
