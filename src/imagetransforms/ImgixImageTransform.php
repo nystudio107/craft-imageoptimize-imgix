@@ -10,19 +10,16 @@
 
 namespace nystudio107\imageoptimizeimgix\imagetransforms;
 
-use nystudio107\imageoptimize\ImageOptimize;
-use nystudio107\imageoptimize\imagetransforms\ImageTransform;
-
+use Craft;
 use craft\elements\Asset;
 use craft\helpers\ArrayHelper;
 use craft\helpers\Assets as AssetsHelper;
 use craft\helpers\UrlHelper;
 use craft\models\AssetTransform;
-
+use craft\volumes\Local;
 use Imgix\UrlBuilder;
-use Psr\Http\Message\ResponseInterface;
-
-use Craft;
+use nystudio107\imageoptimize\ImageOptimize;
+use nystudio107\imageoptimize\imagetransforms\ImageTransform;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
@@ -37,17 +34,35 @@ class ImgixImageTransform extends ImageTransform
     // =========================================================================
 
     const TRANSFORM_ATTRIBUTES_MAP = [
-        'width'   => 'w',
-        'height'  => 'h',
+        'width' => 'w',
+        'height' => 'h',
         'quality' => 'q',
-        'format'  => 'fm',
+        'format' => 'fm',
     ];
 
-    const IMGIX_PURGE_ENDPOINT = 'https://api.imgix.com/v2/image/purger';
-    const IMGIX_PURGE_ENDPOINT_OLD = 'https://api.imgix.com/api/v1/purge';
+    const IMGIX_PURGE_ENDPOINT = 'https://api.imgix.com/api/v1/purge';
 
     // Static Methods
     // =========================================================================
+    /**
+     * @var string
+     */
+    public $domain;
+
+    // Public Properties
+    // =========================================================================
+    /**
+     * @var string
+     */
+    public $apiKey;
+    /**
+     * @var string
+     */
+    public $securityToken;
+    /**
+     * @var int The amount that should be sent to the USM parameter
+     */
+    public $unsharpMask = 20;
 
     /**
      * @inheritdoc
@@ -56,29 +71,6 @@ class ImgixImageTransform extends ImageTransform
     {
         return Craft::t('image-optimize', 'Imgix');
     }
-
-    // Public Properties
-    // =========================================================================
-
-    /**
-     * @var string
-     */
-    public $domain;
-
-    /**
-     * @var string
-     */
-    public $apiKey;
-
-    /**
-     * @var string
-     */
-    public $securityToken;
-
-    /**
-     * @var int The amount that should be sent to the USM parameter
-     */
-    public $unsharpMask = 20;
 
     // Public Methods
     // =========================================================================
@@ -89,12 +81,12 @@ class ImgixImageTransform extends ImageTransform
     }
 
     /**
-     * @param Asset               $asset
+     * @param Asset $asset
      * @param AssetTransform|null $transform
      *
      * @return string|null
-     * @throws \yii\base\Exception
-     * @throws \yii\base\InvalidConfigException
+     * @throws Exception
+     * @throws InvalidConfigException
      */
     public function getTransformUrl(Asset $asset, $transform)
     {
@@ -144,7 +136,7 @@ class ImgixImageTransform extends ImageTransform
                 if ($settings->autoSharpenScaledImages) {
                     // See if the image has been scaled >= 50%
                     $widthScale = (int)((($transform->width ?? $asset->getWidth()) / $asset->getWidth()) * 100);
-                    $heightScale =  (int)((($transform->height ?? $asset->getHeight()) / $asset->getHeight()) * 100);
+                    $heightScale = (int)((($transform->height ?? $asset->getHeight()) / $asset->getHeight()) * 100);
                     if (($widthScale >= (int)$settings->sharpenScaledImagePercentage) || ($heightScale >= (int)$settings->sharpenScaledImagePercentage)) {
                         $params['usm'] = (int)($this->unsharpMask ?? 25);
                     }
@@ -198,7 +190,7 @@ class ImgixImageTransform extends ImageTransform
             $assetUri = $this->getAssetUri($asset);
             $url = $builder->createURL($assetUri, $params);
             Craft::debug(
-                'Imgix transform created for: '.$assetUri.' - Params: '.print_r($params, true).' - URL: '.$url,
+                'Imgix transform created for: ' . $assetUri . ' - Params: ' . print_r($params, true) . ' - URL: ' . $url,
                 __METHOD__
             );
         }
@@ -207,8 +199,8 @@ class ImgixImageTransform extends ImageTransform
     }
 
     /**
-     * @param string              $url
-     * @param Asset               $asset
+     * @param string $url
+     * @param Asset $asset
      * @param AssetTransform|null $transform
      *
      * @return string
@@ -233,7 +225,7 @@ class ImgixImageTransform extends ImageTransform
      * @param Asset $asset
      *
      * @return null|string
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getPurgeUrl(Asset $asset)
     {
@@ -281,10 +273,8 @@ class ImgixImageTransform extends ImageTransform
             );
             return false;
         }
-        $oldAPI = false;
         // Check the API key to see if it is deprecated or not
         if (strlen($this->apiKey) < 50) {
-            $oldAPI = true;
             Craft::$app->deprecator->log(__METHOD__, 'You are using a deprecated API key. Obtain a new API key to use the purging API. More info: https://blog.imgix.com/2020/10/16/api-deprecation');
         }
 
@@ -295,31 +285,19 @@ class ImgixImageTransform extends ImageTransform
         $guzzleClient = Craft::createGuzzleClient(['timeout' => 120, 'connect_timeout' => 120]);
         // Submit the sitemap index to each search engine
         try {
-            if ($oldAPI) {
-                $response = $guzzleClient->post(self::IMGIX_PURGE_ENDPOINT_OLD, [
-                    'auth'        => [
-                        $apiKey,
-                        '',
-                    ],
-                    'form_params' => [
-                        'url' => $url,
-                    ],
-                ]);
-            } else {
-                $response = $guzzleClient->post(self::IMGIX_PURGE_ENDPOINT, [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $apiKey,
-                    ],
-                    'form_params' => [
-                        'data' => [
-                            'attributes' => [
-                                'url' => $url
-                            ],
-                            'type' => 'purges'
-                        ]
-                    ],
-                ]);
-            }
+            $response = $guzzleClient->post(self::IMGIX_PURGE_ENDPOINT, [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $apiKey,
+                ],
+                'form_params' => [
+                    'data' => [
+                        'attributes' => [
+                            'url' => $url
+                        ],
+                        'type' => 'purges'
+                    ]
+                ],
+            ]);
             // See if it succeeded
             if (($response->getStatusCode() >= 200)
                 && ($response->getStatusCode() < 400)
@@ -327,12 +305,12 @@ class ImgixImageTransform extends ImageTransform
                 $result = true;
             }
             Craft::info(
-                'URL purged: '.$url.' - Response code: '.$response->getStatusCode(),
+                'URL purged: ' . $url . ' - Response code: ' . $response->getStatusCode(),
                 __METHOD__
             );
         } catch (\Exception $e) {
             Craft::error(
-                'Error purging URL: '.$url.' - '.$e->getMessage(),
+                'Error purging URL: ' . $url . ' - ' . $e->getMessage(),
                 __METHOD__
             );
         }
@@ -344,7 +322,7 @@ class ImgixImageTransform extends ImageTransform
      * @param Asset $asset
      *
      * @return mixed
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getAssetUri(Asset $asset)
     {
@@ -357,7 +335,7 @@ class ImgixImageTransform extends ImageTransform
         //
         // Therefore, we need to parse the path from the full URL, so that it
         // includes the path of the volume.
-        if ($volume instanceof \craft\volumes\Local) {
+        if ($volume instanceof Local) {
             $assetUrl = AssetsHelper::generateUrl($volume, $asset);
             $assetUri = parse_url($assetUrl, PHP_URL_PATH);
 
