@@ -133,7 +133,7 @@ class ImgixImageTransform extends ImageTransform
                         $params['fm'] = 'pjpg';
                     }
                 }
-                if ($settings->autoSharpenScaledImages) {
+                if ($settings->autoSharpenScaledImages && $asset->getWidth() && $asset->getHeight()) {
                     // See if the image has been scaled >= 50%
                     $widthScale = (int)((($transform->width ?? $asset->getWidth()) / $asset->getWidth()) * 100);
                     $heightScale = (int)((($transform->height ?? $asset->getHeight()) / $asset->getHeight()) * 100);
