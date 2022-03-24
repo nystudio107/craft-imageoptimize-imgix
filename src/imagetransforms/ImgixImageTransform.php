@@ -50,17 +50,17 @@ class ImgixImageTransform extends ImageTransform
     /**
      * @var string
      */
-    public string $domain;
+    public string $domain = '';
 
     /**
      * @var string
      */
-    public string $apiKey;
+    public string $apiKey = '';
 
     /**
      * @var string
      */
-    public string $securityToken;
+    public string $securityToken = '';
 
     /**
      * @var int The amount that should be sent to the USM parameter
