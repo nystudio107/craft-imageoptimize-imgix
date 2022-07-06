@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 4.0.1 - 2022.07.06
+### Fixed
+* Fixed an issue where calling `generateUrl()` would throw an exception ([#342](https://github.com/nystudio107/craft-imageoptimize/issues/342))
+
 ## 4.0.0 - 2022.05.25
 ### Added
 * Initial Craft CMS 4 release

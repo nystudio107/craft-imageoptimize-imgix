@@ -306,8 +306,9 @@ class ImgixImageTransform extends ImageTransform
         //
         // Therefore, we need to parse the path from the full URL, so that it
         // includes the path of the volume.
-        if ($volume->getFs() instanceof Local) {
-            $assetUrl = AssetsHelper::generateUrl($volume, $asset);
+        $fs = $volume->getFs();
+        if ($fs instanceof Local) {
+            $assetUrl = AssetsHelper::generateUrl($fs, $asset);
 
             return parse_url($assetUrl, PHP_URL_PATH);
         }
