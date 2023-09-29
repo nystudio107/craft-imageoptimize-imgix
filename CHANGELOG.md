@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 4.0.2 - 2023.09.29
+### Fixed
+* Fixed an issue where the url is encoded twice ([#5](https://github.com/nystudio107/craft-imageoptimize-imgix/pull/5))
+
 ## 4.0.1 - 2022.07.06
 ### Fixed
 * Fixed an issue where calling `generateUrl()` would throw an exception ([#342](https://github.com/nystudio107/craft-imageoptimize/issues/342))

@@ -310,7 +310,7 @@ class ImgixImageTransform extends ImageTransform
         if ($fs instanceof Local) {
             $assetUrl = AssetsHelper::generateUrl($fs, $asset);
 
-            return parse_url($assetUrl, PHP_URL_PATH);
+            return parse_url(rawurldecode($assetUrl), PHP_URL_PATH);
         }
 
         return parent::getAssetUri($asset);
