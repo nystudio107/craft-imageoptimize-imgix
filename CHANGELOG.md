@@ -1,9 +1,11 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 1.2.7 - 2023.09.29
+### Fixed
+* Fixed an issue where the url is encoded twice ([#5](https://github.com/nystudio107/craft-imageoptimize-imgix/pull/5))
+
 ## 1.2.6 - 2022.03.29
-
 ### Changed
-
 * Tighten the `composer.json` `require` constraints to limit it to the Craft 3 version of ImageOptimize
 
 ## 1.2.5 - 2022.02.24
