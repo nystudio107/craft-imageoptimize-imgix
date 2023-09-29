@@ -337,9 +337,8 @@ class ImgixImageTransform extends ImageTransform
         // includes the path of the volume.
         if ($volume instanceof Local) {
             $assetUrl = AssetsHelper::generateUrl($volume, $asset);
-            $assetUri = parse_url($assetUrl, PHP_URL_PATH);
 
-            return $assetUri;
+            return parse_url(rawurldecode($assetUrl), PHP_URL_PATH);
         }
 
         return parent::getAssetUri($asset);
