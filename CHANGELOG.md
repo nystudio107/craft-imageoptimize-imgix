@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 4.0.3 - 2023.10.23
+### Fixed
+* Parse API key environment variable before checking length ([#6](https://github.com/nystudio107/craft-imageoptimize-imgix/pull/6))
+
 ## 4.0.2 - 2023.09.29
 ### Fixed
 * Fixed an issue where the url is encoded twice ([#5](https://github.com/nystudio107/craft-imageoptimize-imgix/pull/5))
