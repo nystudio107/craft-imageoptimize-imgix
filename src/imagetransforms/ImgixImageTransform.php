@@ -273,14 +273,16 @@ class ImgixImageTransform extends ImageTransform
             );
             return false;
         }
+
+        if (ImageOptimize::$craft31) {
+            $apiKey = Craft::parseEnv($apiKey);
+        }
+
         // Check the API key to see if it is deprecated or not
         if (strlen($this->apiKey) < 50) {
             Craft::$app->deprecator->log(__METHOD__, 'You are using a deprecated API key. Obtain a new API key to use the purging API. More info: https://blog.imgix.com/2020/10/16/api-deprecation');
         }
 
-        if (ImageOptimize::$craft31) {
-            $apiKey = Craft::parseEnv($apiKey);
-        }
         // create new guzzle client
         $guzzleClient = Craft::createGuzzleClient(['timeout' => 120, 'connect_timeout' => 120]);
         // Submit the sitemap index to each search engine
