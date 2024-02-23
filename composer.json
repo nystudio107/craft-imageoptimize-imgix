@@ -2,7 +2,7 @@
   "name": "nystudio107/craft-imageoptimize-imgix",
   "description": "Provides an Imgix image transform type for the ImageOptimize plugin.",
   "type": "image-transform",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "keywords": [
     "craftcms",
     "imgix",
