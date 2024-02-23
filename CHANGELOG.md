@@ -1,5 +1,9 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 4.0.4 - 2024.02.23
+### Fixed
+* Fixed a purging issue due to checking the unparsed API key variable, and sending the wrong payload key ([#7](https://github.com/nystudio107/craft-imageoptimize-imgix/pull/7))
+
 ## 4.0.3 - 2023.10.23
 ### Fixed
 * Parse API key environment variable before checking length ([#6](https://github.com/nystudio107/craft-imageoptimize-imgix/pull/6))
