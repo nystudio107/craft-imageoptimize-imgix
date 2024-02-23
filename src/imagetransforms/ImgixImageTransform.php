@@ -279,7 +279,7 @@ class ImgixImageTransform extends ImageTransform
         }
 
         // Check the API key to see if it is deprecated or not
-        if (strlen($this->apiKey) < 50) {
+        if (strlen($apiKey) < 50) {
             Craft::$app->deprecator->log(__METHOD__, 'You are using a deprecated API key. Obtain a new API key to use the purging API. More info: https://blog.imgix.com/2020/10/16/api-deprecation');
         }
 
@@ -291,7 +291,7 @@ class ImgixImageTransform extends ImageTransform
                 'headers' => [
                     'Authorization' => 'Bearer ' . $apiKey,
                 ],
-                'form_params' => [
+                'json' => [
                     'data' => [
                         'attributes' => [
                             'url' => $url
