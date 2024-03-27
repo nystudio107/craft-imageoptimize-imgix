@@ -2,7 +2,7 @@
   "name": "nystudio107/craft-imageoptimize-imgix",
   "description": "Provides an Imgix image transform type for the ImageOptimize plugin.",
   "type": "image-transform",
-  "version": "4.0.4",
+  "version": "4.0.5",
   "keywords": [
     "craftcms",
     "imgix",
@@ -25,6 +25,24 @@
   "require": {
     "nystudio107/craft-imageoptimize": "^4.0.0",
     "imgix/imgix-php": "^3.0.0"
+  },
+  "require-dev": {
+    "craftcms/ecs": "dev-main",
+    "craftcms/phpstan": "dev-main",
+    "craftcms/rector": "dev-main"
+  },
+  "scripts": {
+    "phpstan": "phpstan --ansi --memory-limit=1G",
+    "check-cs": "ecs check --ansi",
+    "fix-cs": "ecs check --fix --ansi"
+  },
+  "config": {
+    "allow-plugins": {
+      "craftcms/plugin-installer": true,
+      "yiisoft/yii2-composer": true
+    },
+    "optimize-autoloader": true,
+    "sort-packages": true
   },
   "autoload": {
     "psr-4": {
