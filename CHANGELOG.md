@@ -1,5 +1,14 @@
 # ImageOptimize Imgix Image Transform Changelog
 
+## 1.2.10 - UNRELEASED
+### Added
+* Add `phpstan` and `ecs` code linting
+* Add `code-analysis.yaml` GitHub action
+
+### Changed
+* PHPstan code cleanup
+* ECS code cleanup
+
 ## 1.2.9 - 2024.02.23
 ### Fixed
 * Fixed a purging issue due to checking the unparsed API key variable, and sending the wrong payload key ([#7](https://github.com/nystudio107/craft-imageoptimize-imgix/pull/7))
