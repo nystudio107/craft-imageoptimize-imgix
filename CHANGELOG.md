@@ -6,7 +6,6 @@
 * Add `code-analysis.yaml` GitHub action
 
 ### Changed
-* Updated docs to use node 20 & a new sitemap plugin
 * PHPstan code cleanup
 * ECS code cleanup
 
