@@ -24,6 +24,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Imgix\UrlBuilder;
 use nystudio107\imageoptimize\ImageOptimize;
 use nystudio107\imageoptimize\imagetransforms\ImageTransform;
+use nystudio107\imageoptimize\models\Settings;
 
 /**
  * @author    nystudio107
@@ -89,6 +90,7 @@ class ImgixImageTransform extends ImageTransform
     public function getTransformUrl(Asset $asset, CraftImageTransformModel|string|array|null $transform): ?string
     {
         $params = [];
+        /** @var Settings $settings */
         $settings = ImageOptimize::$plugin->getSettings();
 
         $domain = $this->domain ?? 'demos.imgix.net';
@@ -161,9 +163,9 @@ class ImgixImageTransform extends ImageTransform
                         // Imgix defaults to 'center' if no param is present
                         $filteredCropParams = explode('-', $transform->position);
                         $filteredCropParams = array_diff($filteredCropParams, ['center']);
-                        $cropParams[] = $filteredCropParams;
+                        $cropParams = array_merge($cropParams, $filteredCropParams);
                         // Imgix
-                        if (!empty($cropParams) && $transform->position !== 'center-center') {
+                        if ($transform->position !== 'center-center') {
                             $params['crop'] = implode(',', $cropParams);
                         }
                     }
@@ -245,9 +247,9 @@ class ImgixImageTransform extends ImageTransform
             );
             return false;
         }
-        
+
         $apiKey = App::parseEnv($apiKey);
-        
+
         // Check the API key to see if it is deprecated or not
         if (strlen($apiKey) < 50) {
             try {
@@ -268,10 +270,10 @@ class ImgixImageTransform extends ImageTransform
                 'json' => [
                     'data' => [
                         'attributes' => [
-                            'url' => $url
+                            'url' => $url,
                         ],
-                        'type' => 'purges'
-                    ]
+                        'type' => 'purges',
+                    ],
                 ],
             ]);
             // See if it succeeded
